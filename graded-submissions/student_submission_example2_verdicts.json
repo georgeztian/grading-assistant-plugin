@@ -1,0 +1,47 @@
+{
+  "submission_file": "student_submission_example2.docx",
+  "graded_file": "student_submission_example2_Graded.docx",
+  "total_questions": 5,
+  "questions": [
+    {
+      "number": 1,
+      "type": "Multiple Choice",
+      "student_answer": "C",
+      "correct_answer": "C",
+      "verdict": "correct",
+      "explanation": "CORRECT: Your answer C is correct. This matches the solution."
+    },
+    {
+      "number": 2,
+      "type": "Multiple Choice",
+      "student_answer": "B",
+      "correct_answer": "B",
+      "verdict": "correct",
+      "explanation": "CORRECT: Your answer B is correct. This matches the solution."
+    },
+    {
+      "number": 3,
+      "type": "Multiple Choice",
+      "student_answer": "C",
+      "correct_answer": "B",
+      "verdict": "incorrect",
+      "explanation": "INCORRECT: The correct answer is B ($100,000). You answered C ($4,762). For a perpetuity: PV = $5,000 / 0.05 = $100,000."
+    },
+    {
+      "number": 4,
+      "type": "Computation",
+      "student_answer": "No answer provided",
+      "correct_answer": "Requires calculation using annuity formula",
+      "verdict": "incomplete",
+      "explanation": "INCOMPLETE: No answer submitted. Use the annuity formula: PV = C * [1 - (1+r)^(-t)] / r where C=10, r=0.07, t=98."
+    },
+    {
+      "number": 5,
+      "type": "Computation",
+      "student_answer": "No answer provided",
+      "correct_answer": "Requires calculation using annuity formula",
+      "verdict": "incomplete",
+      "explanation": "INCOMPLETE: No answer submitted. Solve for payment using: C = PV * r / [1 - (1+r)^(-t)] where PV=150000, r=0.05, t=15."
+    }
+  ]
+}

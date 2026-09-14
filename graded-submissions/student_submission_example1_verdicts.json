@@ -1,0 +1,57 @@
+{
+  "submission_file": "student_submission_example1.docx",
+  "graded_file": "student_submission_example1_Graded.docx",
+  "total_questions": 5,
+  "questions": [
+    {
+      "number": 1,
+      "section": "COMP",
+      "question_number": 1,
+      "student_answer": "",
+      "correct_answer": "",
+      "verdict": "incomplete",
+      "explanation": "Answer is blank. Correct answer: ",
+      "type": "comp"
+    },
+    {
+      "number": 2,
+      "section": "COMP",
+      "question_number": 2,
+      "student_answer": "",
+      "correct_answer": "",
+      "verdict": "incomplete",
+      "explanation": "Answer is blank. Correct answer: ",
+      "type": "comp"
+    },
+    {
+      "number": 3,
+      "section": "MC",
+      "question_number": 1,
+      "student_answer": "B",
+      "correct_answer": "C",
+      "verdict": "incorrect",
+      "explanation": "Your answer: B. Correct answer: C",
+      "type": "mc"
+    },
+    {
+      "number": 4,
+      "section": "MC",
+      "question_number": 2,
+      "student_answer": "B",
+      "correct_answer": "B",
+      "verdict": "correct",
+      "explanation": "Correct answer.",
+      "type": "mc"
+    },
+    {
+      "number": 5,
+      "section": "MC",
+      "question_number": 3,
+      "student_answer": "B",
+      "correct_answer": "B",
+      "verdict": "correct",
+      "explanation": "Correct answer.",
+      "type": "mc"
+    }
+  ]
+}

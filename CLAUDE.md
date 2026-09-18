@@ -2,6 +2,7 @@
 Grade students' homework submissions using concurrent **grader agent** (red annotations) + **independent checker agent** (single-pass blue verification). Agents work in parallel on different files.
 
 # Workflow Rules
+- **Concurrency cap**: Never launch more than 10 agents of the same type at once — at most 10 grader agents running concurrently, and at most 10 grading-checker agents running concurrently (separately capped; launching, say, 10 graders + 10 checkers at the same time is fine). Launching fewer than 10 at a time (e.g. 5 graders) is fine. If more submissions remain than the cap allows, queue the rest and launch more as earlier ones finish.
 - **Only edit files in `graded-submissions/`**
 - **No unnecessary intermediate files**: agents never create intermediate/temp files (e.g. `.json`, `.txt`) anywhere in the project folder — all extraction, verdicts, and comparisons stay in memory; the only files written are the final `_Graded.docx`/`_Graded.xlsx`
 - **Submissions**: Accepts .doc, .docx, .pdf, .xlsx, and .xls files

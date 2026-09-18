@@ -8,6 +8,7 @@ description: grading instructions to grade students' homework submissions
 Orchestrates parallel **grader agent** (red annotations for incorrect/incomplete only) + **independent checker agent** (single-pass verification, no corrections).
 
 **Key Requirements**: 
+- **Concurrency cap**: never launch more than 10 agents of the same type at once — at most 10 grader agents running concurrently, and (separately) at most 10 grading-checker agents running concurrently. Fewer than 10 at a time is fine (e.g. 5 graders); once the cap is hit, queue remaining submissions and launch more as earlier ones finish.
 - **Only edit files in `graded-submissions/`**
 - **No unnecessary intermediate files**: neither agent creates intermediate/temp files (e.g. `.json`, `.txt`) anywhere in the project folder — all extraction and comparison work stays in memory; the only files written are the final `_Graded.docx`/`_Graded.xlsx`
 - Python-based content extraction for ALL content (text, equations, pictures, special symbols, formatting, spreadsheet tabs/formulas)
@@ -35,9 +36,9 @@ Orchestrates parallel **grader agent** (red annotations for incorrect/incomplete
 ## Concurrent Workflow Overview
 
 Both agents work independently on different files:
-- **Grader**: processes submission queue, one at a time
-- **Checker**: processes submissions with "Grading Completed" mark, one at a time
-- Agents can be invoked concurrently (in separate processes/sessions)
+- **Grader**: processes submission queue, one submission per grader instance
+- **Checker**: processes submissions with "Grading Completed" mark, one submission per checker instance
+- Agents can be invoked concurrently (in separate processes/sessions), **capped at 10 concurrent instances per agent type** — up to 10 graders and up to 10 checkers may run at the same time, but never more than 10 of either type simultaneously. With more than 10 submissions in the queue, launch the first 10 graders, then launch the next as each earlier one finishes (same pattern for checkers).
 
 ## Grader: Grade Submission
 

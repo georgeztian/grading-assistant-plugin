@@ -8,7 +8,7 @@ An AI-agent-based system for grading student homework submissions inside [Claude
 2. **Checker agent** independently re-grades the same submission from scratch — without looking at the grader's annotations first — then compares its own verdicts against the grader's. It adds a final **"Review Passed"** or **"Review FAILED"** mark. If it finds discrepancies, it states every problem explicitly in blue text immediately below the "Review FAILED" mark, in that same graded file — no separate report file is created.
 3. **No auto-correction loop.** This is a single verification pass by design: if the checker fails a submission, a human reviews the stated problems in the graded file and decides what to do — the checker never sends work back to the grader.
 
-The two agents can run concurrently across a batch of submissions since each works on its own file.
+The two agents can run concurrently across a batch of submissions since each works on its own file. **Concurrency is capped at 10 agents of the same type running at once** — at most 10 grader agents and, separately, at most 10 checker agents may run simultaneously. For a batch larger than 10 submissions, the next agent launches as soon as an earlier one of the same type finishes.
 
 ## Folder structure
 
@@ -69,6 +69,7 @@ Naive text extraction silently drops or corrupts a surprising amount of content 
 
 ### Prerequisites
 - [Claude Code] with access to this repository.
+- **Recommended model: Claude Sonnet or higher** (e.g. Sonnet 5, Opus 5). Grading requires careful multi-step content extraction (equations, embedded images, spreadsheet formulas) and nuanced comparison against a solution key — lower-tier models are more prone to missed or inaccurate verdicts.
 - Python 3 with the relevant libraries available (`python-docx`, `pypdf`, `openpyxl`, `xlrd<2.0`, `lxml`; optionally `PyMuPDF`/`pdf2image` for PDF rendering) — the agents will use `pip install` as needed.
 - A `.doc`-to-`.docx` converter for legacy Word files: `LibreOffice` (headless) or `pandoc`, either of which also handles equation-to-LaTeX conversion for `.docx`.
 
@@ -84,8 +85,8 @@ Just ask, in plain language, for example:
 
 This runs the `/grading-instructions` skill, which will:
 1. Inspect the folder structure and match each submission to its solution file (asking you to confirm if a match is ambiguous).
-2. Run the grader agent on each submission.
-3. Run the checker agent once a submission is marked "Grading Completed."
+2. Run the grader agent on each submission, up to 10 grader agents running concurrently (queuing the rest and launching more as earlier ones finish).
+3. Run the checker agent once a submission is marked "Grading Completed," up to 10 checker agents running concurrently (same cap, tracked separately from the grader cap).
 4. Report a Pass/Fail summary for each file.
 
 ### 3. Review the output

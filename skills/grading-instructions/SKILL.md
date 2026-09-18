@@ -9,6 +9,7 @@ Orchestrates parallel **grader agent** (red annotations for incorrect/incomplete
 
 **Key Requirements**: 
 - **Only edit files in `graded-submissions/`**
+- **No unnecessary intermediate files**: neither agent creates intermediate/temp files (e.g. `.json`, `.txt`) anywhere in the project folder — all extraction and comparison work stays in memory; the only files written are the final `_Graded.docx`/`_Graded.xlsx`
 - Python-based content extraction for ALL content (text, equations, pictures, special symbols, formatting, spreadsheet tabs/formulas)
 - Supports .doc, .docx, .pdf, .xlsx, and .xls, for both submissions and solutions
 - Single verification pass (no correction loops)
@@ -48,7 +49,7 @@ Both agents work independently on different files:
 
 **Final verdict** (single pass — never sent back to the grader for correction):
 - **"Review Passed"** (blue mark): grading complete and verified ✓
-- **"Review FAILED"** (blue mark) + `_check_report.json` explicitly stating all problems: user reviews manually and decides next steps
+- **"Review FAILED"** (blue mark), immediately followed by every problem stated explicitly in blue text in the same graded file (no separate report file): user reviews manually and decides next steps
 
 ### Discrepancy Types & Severity
 

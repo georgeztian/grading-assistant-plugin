@@ -1,12 +1,12 @@
 # Grading Assistant
 
-An AI-agent-based system for grading student homework submissions inside [Claude Code]. Two independent agents — a **grader** and a **checker** — extract content from submissions and solution files, compare answers, and produce annotated copies with color-coded feedback, without ever touching the original student files. **The agents only flag incorrect/incomplete answers and explain why — they never subtract points or compute a score.** Turning per-question verdicts into a final grade (point deductions, weighting, totaling) is left entirely to the human instructor.
+An AI-agent-based system for grading student homework submissions inside [Claude Code]. Two independent agents — a **grader** and a **checker** — extract content from submissions and solution files, compare answers, and produce annotated copies with color-coded feedback, without ever touching the original student files. **The agents only flag incorrect/incomplete answers and explain why — they never subtract points or compute a score.** Turning per-question verdicts into a final grade (point deductions, weighting, totaling) is left entirely to the human instructor. **No intermediate files** (e.g. `.json`, `.txt`) are ever created in the project folder — the only files written are the final `_Graded.docx`/`_Graded.xlsx` copies in `graded-submissions/`.
 
 ## How it works
 
 1. **Grader agent** extracts every piece of content from a submission and its matching solution file (text, equations, embedded images, spreadsheet tabs — see [Extraction challenges handled](#extraction-challenges-handled)), compares each answer against the solution, and produces an annotated copy. **Only incorrect or incomplete answers get feedback** — correct answers are left untouched. When grading is done, the grader marks the file **"Grading Completed."**
-2. **Checker agent** independently re-grades the same submission from scratch — without looking at the grader's annotations first — then compares its own verdicts against the grader's. It adds a final **"Review Passed"** or **"Review FAILED"** mark. If it finds discrepancies, it writes a `_check_report.json` explicitly listing every problem.
-3. **No auto-correction loop.** This is a single verification pass by design: if the checker fails a submission, a human reviews the report and decides what to do — the checker never sends work back to the grader.
+2. **Checker agent** independently re-grades the same submission from scratch — without looking at the grader's annotations first — then compares its own verdicts against the grader's. It adds a final **"Review Passed"** or **"Review FAILED"** mark. If it finds discrepancies, it states every problem explicitly in blue text immediately below the "Review FAILED" mark, in that same graded file — no separate report file is created.
+3. **No auto-correction loop.** This is a single verification pass by design: if the checker fails a submission, a human reviews the stated problems in the graded file and decides what to do — the checker never sends work back to the grader.
 
 The two agents can run concurrently across a batch of submissions since each works on its own file.
 
@@ -15,7 +15,7 @@ The two agents can run concurrently across a batch of submissions since each wor
 ```
 reference-solutions/      # Answer key file(s) — .doc, .docx, .pdf, .xlsx, or .xls
 student-submissions/      # Student submissions (same file types) — read-only, never modified
-graded-submissions/       # Output only — annotated copies + optional check reports
+graded-submissions/       # Output only — annotated copies (any check discrepancies are stated inline, no separate report files)
 agents/                   # grader.md, grading-checker.md — the two agents' full logic
 skills/grading-instructions/  # SKILL.md — orchestration workflow
 CLAUDE.md                 # Quick-reference project rules
@@ -42,12 +42,12 @@ Both `reference-solutions/` and `student-submissions/` can either be flat, or or
 **Documents (.docx output):**
 - Red text is inserted immediately below each incorrect/incomplete answer, formatted as `**INCORRECT**: [why, and what the correct answer is]` or `**INCOMPLETE**: [what's missing]`.
 - `Grading Completed` appears in red at the end of the document once the grader is done.
-- `Grading Completed | Review Passed` or `Grading Completed | Review FAILED` is added in **blue** by the checker.
+- `Grading Completed | Review Passed` or `Grading Completed | Review FAILED` is added in **blue** by the checker. If it's a FAILED review, every discrepancy is stated explicitly in blue text immediately below that mark, in the same document — no separate file.
 
 **Spreadsheets (.xlsx output):**
 - Each incorrect/incomplete answer **cell itself** is highlighted using Excel's standard "Bad" style (light red fill, dark red font) — the value/formula is never changed, only its formatting.
 - An explanation is written in red text into the closest empty cell to it (right, then below, then further out) — existing cell content is never overwritten.
-- A dedicated **"Grading Summary"** tab (added as the last sheet) carries `Grading Completed` (red) and, once checked, `Review Passed`/`Review FAILED` (blue).
+- A dedicated **"Grading Summary"** tab (added as the last sheet) carries `Grading Completed` (red) and, once checked, `Review Passed`/`Review FAILED` (blue). If FAILED, every discrepancy is stated explicitly in blue text in the rows immediately below that mark, on the same tab — no separate file.
 
 **Conceptual / short-answer / essay questions:** for written-sentence answers, the system doesn't just judge overall direction — it checks the student's answer against every key term or point the solution's explanation relies on. If the answer is coherent but missing a specific point, it's marked **INCOMPLETE** and every missing point is named explicitly (never a vague "explanation incomplete").
 
@@ -92,7 +92,7 @@ This runs the `/grading-instructions` skill, which will:
 - Open the corresponding file in `graded-submissions/`.
 - Read the red annotations for what was marked wrong and why.
 - Check the blue mark at the end (or on the "Grading Summary" tab) for the checker's final verdict.
-- If it says **Review FAILED**, open the matching `_check_report.json` for the specific discrepancies the checker found, and decide manually how to proceed — the system will not auto-correct or re-grade on its own.
+- If it says **Review FAILED**, read the specific discrepancies stated in blue text immediately below that mark in the same file, and decide manually how to proceed — the system will not auto-correct or re-grade on its own.
 
 ## Important: this is AI-assisted grading
 

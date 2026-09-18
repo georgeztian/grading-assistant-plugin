@@ -54,48 +54,32 @@ Verify grading quality (single pass, no corrections):
 ### Step 4: Mark Final Verdict (Single Pass, No Corrections)
 - **.docx**:
   - No discrepancies: Add **BLUE** mark `Grading Completed | Review Passed` to end of document → ✓ complete
-  - Discrepancies found: Add **BLUE** mark `Grading Completed | Review FAILED` to end of document → Proceed to Step 5 to explicitly state problems
+  - Discrepancies found: Add **BLUE** mark `Grading Completed | Review FAILED` to end of document → proceed to Step 5 to state every problem immediately below this mark, in the same document
 - **.xlsx**:
   - No discrepancies: On the **"Grading Summary"** tab, add a new row below "Grading Completed" with **BLUE** text `Review Passed` → ✓ complete
-  - Discrepancies found: On the **"Grading Summary"** tab, add a new row below "Grading Completed" with **BLUE** text `Review FAILED` → Proceed to Step 5 to explicitly state problems
+  - Discrepancies found: On the **"Grading Summary"** tab, add a new row below "Grading Completed" with **BLUE** text `Review FAILED` → proceed to Step 5 to state every problem in the rows immediately below this mark, on the same "Grading Summary" tab
 
-### Step 5: Generate Discrepancy Report (If Discrepancies Found)
-Use structured findings format:
+### Step 5: State Every Problem (If Discrepancies Found)
+**No separate report file is created** — every discrepancy is written directly into the graded file, immediately below the "Review FAILED" mark, in blue text.
 
-```json
-{
-  "submission_file": "student_submission_1.docx",
-  "total_questions": 5,
-  "checker_verdict": "pass|discrepancies|critical_issues",
-  "discrepancies": [
-    {
-      "question_number": 2,
-      "type": "verdict_mismatch|missed_question|annotation_placement|explanation_error|incomplete_coverage|cell_highlight_missing|missing_keypoint_not_flagged",
-      "severity": "low|medium|high",
-      "checker_verdict": "incorrect",
-      "grader_verdict": "correct",
-      "checker_explanation": "...",
-      "grader_explanation": "...",
-      "notes": "Grader marked as correct but the answer contradicts the solutions file because..."
-    }
-  ],
-  "summary": "Grader correctly evaluated 4/5 questions. 1 significant error in Q2 (marked correct when incorrect)."
-}
-```
+- **.docx**: below the `Grading Completed | Review FAILED` line, add one blue paragraph per discrepancy:
+  - `Q[question_number] — [type]: checker says [checker_verdict] ([checker_explanation]); grader says [grader_verdict] ([grader_explanation]). [notes]`
+  - `type` is one of: `verdict_mismatch`, `missed_question`, `annotation_placement`, `explanation_error`, `incomplete_coverage`, `cell_highlight_missing`, `missing_keypoint_not_flagged`
+  - After the per-question lines, add one closing blue summary line, e.g. "Grader correctly evaluated 4/5 questions. 1 significant error in Q2 (marked correct when incorrect)."
+- **.xlsx**: on the **"Grading Summary"** tab, below the `Review FAILED` row, add one blue-text row per discrepancy with the same fields (question number, type, checker verdict/explanation, grader verdict/explanation, notes), followed by one closing blue summary row.
 
 ## Output
 - **No discrepancies**: `_Graded.docx`/`_Graded.xlsx` with "Review Passed" mark (blue) added → Grading complete ✓
-- **Discrepancies found**: 
-  - `_Graded.docx`/`_Graded.xlsx` with "Review FAILED" mark (blue) added
-  - `_check_report.json` with all problems explicitly stated (no corrections, final verdict)
+- **Discrepancies found**: `_Graded.docx`/`_Graded.xlsx` with "Review FAILED" mark (blue) added, followed immediately by every problem stated explicitly in blue text in that same file (no corrections, final verdict) — no separate file is created
 
 ## Constraints
 - **ONLY write to `graded-submissions/`**
+- **Never create intermediate/temp files (e.g. `.json`, `.txt`) in the project folder** — independent verdicts and comparisons stay in memory; the only file written is the same `_Graded.docx`/`_Graded.xlsx` the grader produced
 - Grade blindly first — form own verdicts before checking grader's work
 - **Use Python for extraction** — match grader's precision and rigor, across every sheet/tab for spreadsheets
-- **Use BLUE INK TEXT** for final marks (not red) — end of document for .docx, "Grading Summary" tab for .xlsx
+- **Use BLUE INK TEXT** for final marks and discrepancy explanations (not red) — end of document for .docx, "Grading Summary" tab for .xlsx
 - Single verification pass (no corrections sent back)
-- If verification FAILS: explicitly list all problems in `_check_report.json`
+- If verification FAILS: explicitly list all problems in blue text immediately below the "Review FAILED" mark, in the graded file itself — never in a separate file
 - If unreadable content: mark "unreadable" and compare against grader's handling
-- If ambiguous answers: note as `severity: low` with explanation
+- If ambiguous answers: note as low severity with explanation
 - **Never calculate or write a total score/grade** (e.g. "8/10", "80%", a letter grade, a sum of points) — verify only per-question verdicts; total scoring is left to the human instructor

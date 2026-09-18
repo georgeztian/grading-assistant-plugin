@@ -103,6 +103,7 @@ Verify nothing missed, all questions visible and complete before proceeding — 
 
 ## Constraints
 - **ONLY write to `graded-submissions/`**
+- **Never create intermediate/temp files (e.g. `.json`, `.txt`) in the project folder** — extracted content and verdicts stay in memory during grading; the only file written is the final `_Graded.docx`/`_Graded.xlsx`
 - **Use Python for extraction** — all content must be properly extracted for accuracy, across every sheet/tab for spreadsheets
 - Only annotate **incorrect/incomplete** answers (correct answers need NO feedback)
 - **.docx**: all annotations in **red text**, **immediately below each answer** (not at end)

@@ -1,0 +1,8 @@
+{
+  "name": "grading-assistant",
+  "version": "1.0.0",
+  "description": "A grading assistant for evaluating student submissions.",
+  "author": {
+    "name": "George Zhe Tian"
+  }
+}

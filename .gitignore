@@ -1,0 +1,25 @@
+# Office lock/temp files created while a document is open
+~$*.docx
+~$*.xlsx
+~$*.doc
+~$*.xls
+
+# Python
+__pycache__/
+*.pyc
+
+# Agent scratch space
+.tmp_checker/
+
+# Secrets
+.env
+.env.*
+*.key
+*.pem
+
+# OS
+.DS_Store
+Thumbs.db
+
+# VS Code local settings
+.vscode/

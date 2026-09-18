@@ -6,7 +6,6 @@ An AI-agent-based system for grading student homework submissions inside [Claude
 
 1. **Grader agent** extracts every piece of content from a submission and its matching solution file (text, equations, embedded images, spreadsheet tabs — see [Extraction challenges handled](#extraction-challenges-handled)), compares each answer against the solution, and produces an annotated copy. **Only incorrect or incomplete answers get feedback** — correct answers are left untouched. When grading is done, the grader marks the file **"Grading Completed."**
 2. **Checker agent** independently re-grades the same submission from scratch — without looking at the grader's annotations first — then compares its own verdicts against the grader's. It adds a final **"Review Passed"** or **"Review FAILED"** mark. If it finds discrepancies, it states every problem explicitly in blue text immediately below the "Review FAILED" mark, in that same graded file — no separate report file is created.
-3. **No auto-correction loop.** This is a single verification pass by design: if the checker fails a submission, a human reviews the stated problems in the graded file and decides what to do — the checker never sends work back to the grader.
 
 The two agents can run concurrently across a batch of submissions since each works on its own file. **Concurrency is capped at 10 agents of the same type running at once** — at most 10 grader agents and, separately, at most 10 checker agents may run simultaneously. For a batch larger than 10 submissions, the next agent launches as soon as an earlier one of the same type finishes.
 
@@ -54,16 +53,6 @@ Both `reference-solutions/` and `student-submissions/` can either be flat, or or
 If nothing is annotated and the mark is "Review Passed," every question was answered correctly.
 
 **No total score:** neither agent calculates or writes a total score/grade (e.g. "8/10", "80%", a letter grade), and neither subtracts points per question — they only record a per-question correct/incorrect/partial verdict plus an explanation. Deciding how much each wrong or incomplete answer costs, and adding it all up into a final grade, is left entirely to the human instructor.
-
-## Extraction challenges handled
-
-Naive text extraction silently drops or corrupts a surprising amount of content — this system is built around specific known failure modes:
-
-- **Legacy `.doc` files** can't be opened by `python-docx` at all — they're converted to `.docx` first (via LibreOffice or pandoc) before any extraction happens.
-- **Word's built-in equations (OMML)** aren't visible to plain `python-docx` text reads (they come back as empty strings) — recovered by parsing the underlying XML directly.
-- **Equations in PDFs exported from Word** commonly extract as corrupted text (duplicated characters, stray Unicode math symbols, scrambled fraction layout) — the system renders the affected page to an image and reads the equation visually instead of trusting the text layer.
-- **Spreadsheets**: every worksheet tab is read (not just the active one), both a formula-level and cached-value-level pass are done (a formula-only file has no cached value), and hidden sheets/rows/columns are checked.
-- **Embedded images** in a document (screenshots, handwritten work, diagrams) are extracted and actually looked at — a question isn't marked blank just because its answer lives inside a picture rather than as text.
 
 ## How to use it
 

@@ -1,6 +1,6 @@
 # Grading Assistant
 
-An AI-agent-based system for grading student homework submissions inside [Claude Code]. Two independent agents — a **grader** and a **checker** — extract content from submissions and solution files, compare answers, and produce annotated copies with color-coded feedback, without ever touching the original student files. **The agents only flag incorrect/incomplete answers and explain why — they never subtract points or compute a score.** Turning per-question verdicts into a final grade (point deductions, weighting, totaling) is left entirely to the human instructor. **No intermediate files** (e.g. `.json`, `.txt`) are ever created in the project folder — the only files written are the final `_Graded.docx`/`_Graded.xlsx` copies in `graded-submissions/`.
+An AI-agent-based system for grading student homework submissions inside [Claude Code]. Two independent agents — a **grader** and a **checker** — extract content from submissions and solution files, compare answers, and produce annotated copies with color-coded feedback, without ever touching the original student files. **The agents only flag incorrect/incomplete answers and explain why — they never subtract points or compute a score.** Turning per-question verdicts into a final grade (point deductions, weighting, totaling) is left entirely to the human instructor. The only files written are the final `_Graded.docx`/`_Graded.xlsx` copies in `graded-submissions/`.
 
 ## How it works
 

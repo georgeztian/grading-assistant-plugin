@@ -8,7 +8,7 @@ Grade students' homework submissions using concurrent **grader agent** (red anno
 - **Submissions**: Accepts .doc, .docx, .pdf, .xlsx, and .xls files
 - **Annotations**: Only annotate incorrect/incomplete answers (correct answers need no feedback). Placement convention (documents vs. spreadsheets), content extraction requirements (equations, spreadsheet tabs), and conceptual-question key-point checking are detailed in `grader.md` and summarized in `SKILL.md` — both grader and checker must follow the same methods
 - **No scoring**: Agents never calculate or write a total score/grade (e.g. "8/10", "80%", a letter grade) — only per-question correct/incorrect/partial verdicts and explanations. Scoring is left entirely to the human instructor.
-- **Verification**: Single-pass check by grader-checker (no correction loops)
+- **Verification**: Single-pass check by the checker (no correction loops)
   - If "Review Passed" → grading complete ✓
   - If "Review FAILED" → explicitly state every problem in blue text immediately below the mark, in the graded file itself (no separate report file)
 - See SKILL.md for workflow details
@@ -26,5 +26,4 @@ Use the `/grading-instructions` skill for detailed workflow and invocation instr
 - **Per-homework subfolders (optional)**: `reference-solutions/` and `student-submissions/` may each be flat or organized into subfolders (e.g. `HW1/`, `HW2/`), not always the same way on both sides. Agents must match a submission's subfolder to a solutions subfolder by exact name before grading (see `SKILL.md` Step 0), and output mirrors the input structure (e.g. `graded-submissions/HW1/`).
 - `agents/` → `grader.md`, `grading-checker.md`
 - `skills/grading-instructions/` → Full workflow
-
 

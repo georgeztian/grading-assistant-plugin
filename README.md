@@ -85,8 +85,8 @@ Just ask, in plain language, for example:
 
 This runs the `/grading-instructions` skill, which will:
 1. Inspect the folder structure and match each submission to its solution file (asking you to confirm if a match is ambiguous).
-2. Run the grader agent on each submission, up to 10 grader agents running concurrently (queuing the rest and launching more as earlier ones finish).
-3. Run the checker agent once a submission is marked "Grading Completed," up to 10 checker agents running concurrently (same cap, tracked separately from the grader cap).
+2. Run the grader agent on each submission (respecting the concurrency cap above).
+3. Run the checker agent once a submission is marked "Grading Completed" (same cap, tracked separately).
 4. Report a Pass/Fail summary for each file.
 
 ### 3. Review the output
